@@ -2,9 +2,49 @@
 # kaggle/python container. It checks that all our most popular packages can
 # be loaded and used without errors.
 
+import tensorflow as tf
+print(tf.__version__)
+hello = tf.constant('TensorFlow ok')
+sess = tf.Session()
+print(sess.run(hello))
+print("Tensorflow ok")
+
+from keras.models import Sequential
+from keras.layers.core import Dense, Dropout, Activation, Flatten
+from keras.layers.convolutional import Convolution2D, MaxPooling2D
+from keras.optimizers import SGD
+print("Keras ok")
+
+# Test Kaggle learntools
+from learntools.core import binder; binder.bind(globals())
+from learntools.python.ex1 import *
+color="blue"
+q0.check()
+print("learntools ok")
+
+# PyTorch smoke test based on http://pytorch.org/tutorials/beginner/nlp/deep_learning_tutorial.html
+import torch
+import torch.nn as tnn
+import torch.autograd as autograd
+torch.manual_seed(31337)
+linear_torch = tnn.Linear(5,3)
+data_torch = autograd.Variable(torch.randn(2, 5))
+print(linear_torch(data_torch))
+print("PyTorch ok")
+
+import fastai
+from fastai.io import get_data
+print("fast.ai ok")
+
 import numpy as np
 print("Numpy imported ok")
 print("Your lucky number is: " + str(np.random.randint(100)))
+
+# Numpy must be linked to the MKL. (Occasionally, a third-party package will muck up the installation
+# and numpy will be reinstalled with an OpenBLAS backing.)
+from numpy.distutils.system_info import get_info
+# This will throw an exception if the MKL is not linked correctly.
+get_info("blas_mkl")
 
 import pandas as pd
 print("Pandas imported ok")
@@ -43,26 +83,12 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 print("plotly ok")
 
-from ggplot import *
-print("ggplot ok")
-
 import theano
 print("Theano ok")
-
-from keras.models import Sequential
-from keras.layers.core import Dense, Dropout, Activation, Flatten
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
-from keras.optimizers import SGD
-print("keras ok")
 
 import nltk
 from nltk.stem import WordNetLemmatizer
 print("nltk ok")
-
-import tensorflow as tf
-hello = tf.constant('TensorFlow ok')
-sess = tf.Session()
-print(sess.run(hello))
 
 import cv2
 img = cv2.imread('plot1.png',0)
@@ -71,18 +97,35 @@ print("OpenCV ok")
 from skimage.io import imread
 print("skimage ok")
 
+from wordbatch.extractors import WordBag
+print("wordbatch ok")
+
+import pyfasttext
+print("pyfasttext ok")
+
+import fastText
+print("fastText ok")
+
+import mxnet
+import mxnet.gluon
+print("mxnet ok")
+
+import bokeh
+print("bokeh ok")
+
+import seaborn
+print("seaborn ok")
+
+# Test BigQuery
 import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from google.cloud import bigquery
-
 HOSTNAME = "127.0.0.1"
 PORT = 8000
 URL = "http://%s:%s" % (HOSTNAME, PORT)
-
 fake_bq_called = False
 fake_bq_header_found = False
-
 class HTTPHandler(BaseHTTPRequestHandler):
     def do_HEAD(s):
         s.send_response(200)
@@ -96,18 +139,29 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
 httpd = HTTPServer((HOSTNAME, PORT), HTTPHandler)
 threading.Thread(target=httpd.serve_forever).start()
-
 client = bigquery.Client()
-
 try:
     for ds in client.list_datasets(): pass
 except:
     pass
-
 httpd.shutdown()
-
 assert fake_bq_called, "Fake server did not recieve a request from the BQ client."
 assert fake_bq_header_found, "X-KAGGLE-PROXY-DATA header was missing from the BQ request."
-
 print("bigquery proxy ok")
 
+import shap
+print("shap ok")
+
+import kmapper
+print("kmapper ok")
+
+from vowpalwabbit import pyvw
+vw = pyvw.vw(quiet=True)
+ex = vw.example('1 | a b c')
+vw.learn(ex)
+print(vw.predict(ex))
+print('vowpalwabbit ok')
+
+import essentia
+print(essentia.__version__)
+print("Essentia ok")
