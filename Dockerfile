@@ -466,7 +466,6 @@ RUN pip install bcolz && \
     pip install widgetsnbextension && \
     cd /usr/local/src && git clone --depth=1 https://github.com/fastai/fastai && \
     cd fastai && python setup.py install && \
->>>>>>> 8707befc0244315e2d23f87c348dfca70f789a71
     # clean up pip cache
     rm -rf /root/.cache/pip/* && \
     cd && rm -rf /usr/local/src/*
